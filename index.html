@@ -1,57 +1,88 @@
-<script>
-  document.write(document.location);
-</script>
-<form
-  action="{{route('contact.send')}}"
-  class="mb-3"
-  method="post"
-  enctype="multipart/form-data"
->
-  {!! csrf_field() !!}
-  <div class="form-row">
-    <div class="form-group col-md-5">
-      <label for="name" class="control-label">Name</label>
-      <input
-        name="name"
-        class="form-control"
-        type="text"
-        id="name"
-        value="{{old('name')}}"
-      />
-    </div>
-    <div class="form-group col-md-7">
-      <label for="email" class="control-label">Email</label>
-      <input
-        name="email"
-        class="form-control"
-        type="email"
-        id="email"
-        value="{{old('email')}}"
-      />
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-md-12 form-group">
-      <label for="body" class="control-label">Message</label>
-      <textarea name="body" id="body" class="form-control" cols="50" rows="10">
-{{old('body')}}</textarea
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Signup Form</title>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+      .form-container {
+        background-color: white;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      .form-group {
+        margin-bottom: 15px;
+      }
+      label {
+        display: block;
+        margin-bottom: 5px;
+      }
+      input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+      button {
+        padding: 10px 15px;
+        background-color: #28a745;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #218838;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="form-container">
+      <h2>Signup</h2>
+      <form
+        id="signupForm"
+        method="POST"
+        action="https://stonade.darkube.app/api/v1/auth/signup"
       >
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" required />
+        </div>
+        <div class="form-group">
+          <label for="password">Password:</label>
+          <input type="password" id="password" name="password" required />
+        </div>
+        <div class="form-group">
+          <div
+            class="g-recaptcha"
+            data-sitekey="6LcCNp8qAAAAAN-PNngfZFq4FhdkgMk3gbnp3KQD"
+          ></div>
+        </div>
+        <button type="submit">Signup</button>
+      </form>
     </div>
-  </div>
-  <div class="row">
-    <div class="col-md-12 text-right">
-      <div
-        class="g-recaptcha"
-        data-sitekey="6LcCNp8qAAAAAN-PNngfZFq4FhdkgMk3gbnp3KQD"
-      ></div>
-    </div>
-  </div>
-  <div class="form-row mt-2">
-    <div class="col-md-2 form-group text-right">
-      <button type="submit" class="btn btn-info">Send</button>
-    </div>
-  </div>
-</form>
 
-<script src="https://www.google.com/recaptcha/api.js"></script>
+    <script>
+      document
+        .getElementById("signupForm")
+        .addEventListener("submit", function (event) {
+          // Validate reCAPTCHA
+          var response = grecaptcha.getResponse();
+          if (response.length === 0) {
+            event.preventDefault();
+            alert("Please complete the reCAPTCHA.");
+          }
+        });
+    </script>
+  </body>
+</html>
